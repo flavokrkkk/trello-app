@@ -9,7 +9,7 @@ export const $authHost = axios.create({
   baseURL: baseUrl.REACT_API_URL,
 });
 
-const authInterceptor = (config) => {
+const authInterceptor = (config: any) => {
   config.headers.authorization = `Bearer ${localStorage.getItem("token")}`;
   return config;
 };

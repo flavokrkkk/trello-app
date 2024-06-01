@@ -8,21 +8,44 @@ import {
   TypographySubTitle,
   TypographyTitle,
 } from "./styles";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RoutesName } from "../../utils/routesName";
+import { ChangeEventHandler, FC, useState } from "react";
 
-const LoginForm = () => {
-  const { pathname } = useLocation();
+interface LoginFormProps {
+  isPathName: boolean;
+  handleAuthorizeUserAsync: (email: string, password: string) => void;
+}
 
+const LoginForm: FC<LoginFormProps> = ({
+  isPathName,
+  handleAuthorizeUserAsync,
+}) => {
   const navigate = useNavigate();
 
-  const isPathName = pathname === RoutesName.LOGIN_ROUTE;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleNavigation = () => {
     isPathName
       ? navigate(RoutesName.REGISTRATION_ROUTE)
       : navigate(RoutesName.LOGIN_ROUTE);
   };
+
+  const handleChangeEmail: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleChangePassword: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setPassword(event.target.value);
+  };
+
+  const handleAuthorizeUser = () => {
+    handleAuthorizeUserAsync(email, password);
+  };
+
   return (
     <GridWrapper container>
       <TypographyTitle variant="h3">Добрый день!</TypographyTitle>
@@ -31,8 +54,20 @@ const LoginForm = () => {
       </TypographySubTitle>
       <form>
         <GridForm container>
-          <TextField size="small" fullWidth placeholder="E-mail" />
-          <TextField size="small" fullWidth placeholder="Password" />
+          <TextField
+            value={email}
+            size="small"
+            fullWidth
+            placeholder="E-mail"
+            onChange={handleChangeEmail}
+          />
+          <TextField
+            value={password}
+            size="small"
+            fullWidth
+            placeholder="Password"
+            onChange={handleChangePassword}
+          />
           <BoxForm>
             <span>
               {isPathName ? (
@@ -47,7 +82,7 @@ const LoginForm = () => {
                 </>
               )}
             </span>
-            <Button variant="outlined">
+            <Button variant="outlined" onClick={handleAuthorizeUser}>
               {isPathName ? "Войти" : " Зарегистрироваться"}
             </Button>
           </BoxForm>

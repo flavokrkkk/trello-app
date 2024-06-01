@@ -2,9 +2,11 @@ import { Route, Routes } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "../../routes/routes";
 import BoardPage from "../../pages/BoardPage/BoardPage";
 import AuthPage from "../../pages/AuthPage/AuthPage";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { UserSelector } from "../../store/selectors";
 
 const AppRouter = () => {
-  const isAuth = false;
+  const { isAuth } = useAppSelector(UserSelector);
 
   return isAuth ? (
     <Routes>
