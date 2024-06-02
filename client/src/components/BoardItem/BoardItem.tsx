@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { DragEventHandler, FC, useState } from "react";
 import { IBoard } from "../../models/IBoard";
 import { CardBody, CardItem, CardTitle } from "./styles";
 
@@ -7,6 +7,31 @@ interface BoardItemProps {
 }
 
 const BoardItem: FC<BoardItemProps> = ({ boards }) => {
+  const [currentBoard, setCurrentBoard] = useState(null);
+  const [currentItem, setCurrentItem] = useState(null);
+
+  const dragOverHandler: DragEventHandler = (event) => {
+    event.preventDefault();
+  };
+
+  const dragLeaveHandler: DragEventHandler = (event) => {
+    event.preventDefault();
+    console.log("leave");
+  };
+
+  const dragStartHandler: DragEventHandler = (event) => {
+    console.log("start");
+  };
+
+  const dragEndHandler: DragEventHandler = (event) => {
+    console.log("end");
+  };
+
+  const dropHandler = (event: DragEvent) => {
+    event.preventDefault();
+    console.log("drop");
+  };
+
   return (
     <>
       {boards.map((board) => (
@@ -14,7 +39,16 @@ const BoardItem: FC<BoardItemProps> = ({ boards }) => {
           <CardTitle>{board.title}</CardTitle>
           <div>
             {board.items.map((item) => (
-              <CardItem>{item.title}</CardItem>
+              <CardItem
+                draggable
+                onDragOver={dragOverHandler}
+                onDragLeave={dragLeaveHandler}
+                onDragStart={dragStartHandler}
+                onDragEnd={dragEndHandler}
+                onDrop={(event) => dropHandler(event)}
+              >
+                {item.title}
+              </CardItem>
             ))}
           </div>
         </CardBody>
